@@ -1,0 +1,43 @@
+@apiHost = http://localhost:3000
+
+
+### Getting a list of users
+# @name allUsers
+GET {{apiHost}}/api/users/all
+
+###
+@userId = {{allUsers.response.body.users[1].id}}
+@created = 2025-07-01T06:07:32.544Z
+
+### new person (why not PUT)
+POST {{apiHost}}/api/users/add
+Content-Type: application/json
+
+{
+    "user": {
+        "id": 1,
+        "created": "{{created}}",
+        "name": "dfgdfg",
+        "email": "dfgdfgdgfg"
+    }
+}
+
+### delete person
+DELETE {{apiHost}}/api/users/delete/{{userId}}
+
+### edit person
+PUT {{apiHost}}/api/users/update
+Content-Type: application/json
+
+{
+    "user": {
+        "id": {{userId}},
+        "created": "{{created}}",
+        "name": "first",
+        "email": "second" 
+        }
+}
+
+
+
+
