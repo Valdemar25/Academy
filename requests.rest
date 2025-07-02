@@ -3,7 +3,7 @@
 
 ### Getting a list of users
 # @name allUsers
-GET {{apiHost}}/api/users/all
+GET {{apiHost}}/hello
 
 ###
 @userId = {{allUsers.response.body.users[1].id}}
@@ -38,6 +38,13 @@ Content-Type: application/json
         }
 }
 
+###
 
+PUT {{apiHost}}/hello
+Content-Type: application/json
+
+{
+    "name": "Vladimir"
+}
 
 
