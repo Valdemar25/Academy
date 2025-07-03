@@ -40,12 +40,33 @@ Content-Type: application/json
 
 ###
 
-PUT {{apiHost}}/hello
+POST {{apiHost}}/hello
 Content-Type: application/json
 
 {
-    "name": "Vladimir",
-    export const name
+    "name": "Vladimir"
 }
+
+
+### Получение данных
+
+GET {{apiHost}}/er
+//добавить входные параметры через дайрект фильтер погода типо и т.д.
+//удаление и фильтрация фильмов по id 
+### Заполнение данных в массив let
+
+POST {{apiHost}}/new
+Content-Type: application/json
+
+{
+    "data": {
+        "title": "Title",
+        "genres" : ["horror", "sci-fi"],
+        "actors": ["Pupa" , "Lupa"],
+        "year": 1994
+    }
+}
+
+
 
 

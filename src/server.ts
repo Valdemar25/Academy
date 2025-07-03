@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import morgan from 'morgan';
 import path from 'path';
@@ -12,8 +14,9 @@ import { NodeEnvs } from '@src/common/constants';
 /******************************************************************************
                                 Setup
 ******************************************************************************/
-
+//записать два инпута по одному записывать данные в массив, а по другому получать данные
 const app = express();
+const items = [];
 
 
 // **** Middleware **** //
@@ -35,19 +38,30 @@ if (ENV.NodeEnv === NodeEnvs.Production) {
   }
 }
 
-app.put('/hello', (req, res) => {
-  const name1 = ;
+app.post('/hello', (req: Request<{}, {}, {name: string}>, res: Response<{message: string}>) => {
+  const name1 = req.body.name;
   console.log(name1);
-  if (name1 == "Vladimir") {
-    res.status(201);
-    res.send({ message: "Great Vladimir" });
+  if (name1?.length > 0) {
+    res.status(200);
+    res.send({ message: `Greating ${name1}`});
   } else {
     res.status(400);
     res.send({ message: "ERROR" });
   }
 });
 
-// debug
+app.post('/new',(req, res) =>{
+  console.log(req.body.data);
+  const movie = {id: new Date().getTime(), ...req.body.data};
+  items.push(req.body.data);
+  res.send({data: {status: "OK", data: movie}});
+
+});
+
+app.get('/er',(req, res) =>{
+  console.log(req.body.data);
+});
+// console.log(req.body.name)
 
 /******************************************************************************
                                 Export default
