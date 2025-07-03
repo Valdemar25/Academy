@@ -36,13 +36,17 @@ if (ENV.NodeEnv === NodeEnvs.Production) {
 }
 
 app.put('/hello', (req, res) => {
-  console.log(req.body.name);
-  res.status(201);
-  res.send({message: "hello"});
+  const name1 = ;
+  console.log(name1);
+  if (name1 == "Vladimir") {
+    res.status(201);
+    res.send({ message: "Great Vladimir" });
+  } else {
+    res.status(400);
+    res.send({ message: "ERROR" });
+  }
 });
 
-
-// задача при правильном формате данных вводе выводить GR VL при неправильном ERROR, hello это адресс, а имя name
 // debug
 
 /******************************************************************************
