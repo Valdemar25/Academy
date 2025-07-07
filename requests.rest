@@ -48,9 +48,7 @@ Content-Type: application/json
 }
 
 
-### Получение данных
 
-GET {{apiHost}}/er
 //добавить входные параметры через дайрект фильтер погода типо и т.д.
 //удаление и фильтрация фильмов по id 
 ### Заполнение данных в массив let
@@ -60,13 +58,21 @@ Content-Type: application/json
 
 {
     "data": {
-        "title": "Title",
-        "genres" : ["horror", "sci-fi"],
-        "actors": ["Pupa" , "Lupa"],
-        "year": 1994
+        "title": "Fight",
+        "genres" : ["war", "documental"],
+        "actors": ["Pupa" , "Lupa", "Chook"],
+        "year": 1996
     }
 }
 
+### Получение данных
 
+GET {{apiHost}}/movies
+Content-Type: application/json
 
-
+{
+    "year": 1996,
+    "actor": "Chook",
+    "genre": "war",
+    "title": "Fight"    
+}
