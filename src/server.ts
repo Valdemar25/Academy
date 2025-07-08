@@ -16,20 +16,9 @@ import { NodeEnvs } from "@src/common/constants";
 //записать два инпута по одному записывать данные в массив, а по другому получать данные
 const app = express();
 
-interface Movie {
-  id?: number;
-  title: string;
-  genres: string[];
-  actors: string[];
-  year: number;
-}
+import { Movie } from './VALD';
 
-interface MovieFilter {
-  year: number;
-  actor:string;
-  genre: string;
-  title: string;
-}
+import { MovieFilter } from './VALD';
 
 const items: Movie[] = [
   {
