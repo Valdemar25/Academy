@@ -71,7 +71,7 @@ GET {{apiHost}}/movies
 Content-Type: application/json
 
 {
-    "year": 1996,
+    "year": 1995,
     "actor": "Chook",
     "genre": "war",
     "title": "Fight"    

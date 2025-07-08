@@ -7,7 +7,7 @@ import helmet from "helmet";
 import express, { Request, Response, NextFunction } from "express";
 import logger from "jet-logger";
 
-import ENV from "@src/common/constants/ENV";
+import ENV from "@src/common/constants/env";
 import { NodeEnvs } from "@src/common/constants";
 
 /******************************************************************************
@@ -16,9 +16,9 @@ import { NodeEnvs } from "@src/common/constants";
 //записать два инпута по одному записывать данные в массив, а по другому получать данные
 const app = express();
 
-import { Movie } from './VALD';
-
-import { MovieFilter } from './VALD';
+import { Movie, MovieFilter } from "./common/types/movie";
+import { User } from "./db/movie";
+import { UserModel } from "./common/types/user";
 
 const items: Movie[] = [
   {
@@ -54,21 +54,16 @@ if (ENV.NodeEnv === NodeEnvs.Production) {
   }
 }
 
-app.post(
+app.get(
   "/hello",
-  (
+   (
     req: Request<{}, {}, { name: string }>,
     res: Response<{ message: string }>
   ) => {
-    const name1 = req.body.name;
-    console.log(name1);
-    if (name1?.length > 0) {
-      res.status(200);
-      res.send({ message: `Greating ${name1}` });
-    } else {
-      res.status(400);
-      res.send({ message: "ERROR" });
-    }
+    const jane = UserModel.build({ name: "Jane" });
+    console.log(jane instanceof UserModel); // true
+    console.log(jane.name); // "Jane"
+    jane.save().then((saved) => console.log(saved));
   }
 );
 
@@ -93,10 +88,7 @@ app.post("/new", (req, res) => {
 app.get(
   "/movies",
   (
-    request: Request<
-      {},
-      {},
-      MovieFilter>,
+    request: Request<{}, {}, MovieFilter>,
     response: Response<{ data: typeof items }>
   ) => {
     console.log(items);
