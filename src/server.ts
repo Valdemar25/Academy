@@ -67,6 +67,7 @@ app.get(
   }
 );
 
+
 app.post("/new", (req, res) => {
   console.log(req.body.data);
   const movie: Movie = { id: new Date().getTime(), ...req.body.data };

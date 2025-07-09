@@ -1,4 +1,7 @@
-export interface Movie {
+import { sequelize } from "@src/db/dbconn";
+import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from "sequelize";
+
+interface Movie {
   id?: number;
   title: string;
   genres: string[];
@@ -6,7 +9,7 @@ export interface Movie {
   year: number;
 }
 
-export interface MovieFilter {
+interface MovieFilter {
   year: number;
   actor:string;
   genre: string;
