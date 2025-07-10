@@ -16,30 +16,15 @@ import { NodeEnvs } from "@src/common/constants";
 //записать два инпута по одному записывать данные в массив, а по другому получать данные
 const app = express();
 
-import { Movie, MovieFilter } from "./common/types/movie";
-import { User } from "./db/movie";
-import { UserModel } from "./common/types/user";
-
-const items: Movie[] = [
-  {
-    title: "Fight",
-    genres: ["war", "documental"],
-    actors: ["Pupa", "Lupa", "Chook"],
-    year: 1995,
-  },
-  {
-    title: "Fight",
-    genres: ["war", "documental"],
-    actors: ["Pupa", "Lupa", "Geck"],
-    year: 1996,
-  },
-];
+import { ActorModel, GenreModel, MovieModel } from "./common/types/movie";
+import { title } from "process";
 
 // **** Middleware **** //
 
 // Basic middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.set("view engine", "ejs");
 
 // Show routes called in console during development
 if (ENV.NodeEnv === NodeEnvs.Dev) {
@@ -54,65 +39,38 @@ if (ENV.NodeEnv === NodeEnvs.Production) {
   }
 }
 
-app.get(
-  "/hello",
-   (
-    req: Request<{}, {}, { name: string }>,
-    res: Response<{ message: string }>
-  ) => {
-    const jane = UserModel.build({ name: "Jane" });
-    console.log(jane instanceof UserModel); // true
-    console.log(jane.name); // "Jane"
-    jane.save().then((saved) => console.log(saved));
-  }
-);
-
-
-app.post("/new", (req, res) => {
-  console.log(req.body.data);
-  const movie: Movie = { id: new Date().getTime(), ...req.body.data };
-  items.push(movie);
-  res.send({ data: { status: "OK", data: movie } });
+app.get("/", (req: Request<{}, {}, { name: string }>, res: Response<{}>) => {
+  MovieModel.findAll({ include: [ActorModel, GenreModel] }).then((movies) => {
+    console.log(movies);
+    res.render("list", { title: "hui", items: movies });
+  });
 });
 
-/*function keep(array, chast){
-  const filtered = items.filter((array) =>{
-    let match = true;
-    if (chast) {
-      match = match && array.actors.includes(chast);
-    }
-    return match;
-  });
-  return filtered;
-}*/
-
 app.get(
-  "/movies",
-  (
-    request: Request<{}, {}, MovieFilter>,
-    response: Response<{ data: typeof items }>
-  ) => {
-    console.log(items);
-    const filtered = items.filter((item) => {
-      let match = true;
-      if (request?.body?.year) {
-        match = match && request?.body?.year === item.year;
-      }
-      if (request?.body?.actor) {
-        match = match && item.actors.includes(request?.body?.actor);
-      }
-      if (request?.body?.genre) {
-        match = match && item.genres.includes(request?.body?.genre);
-      }
-      if (request?.body?.title) {
-        match = match && item.title.includes(request?.body?.title);
-        //match = match && (request?.body?.title === item.title);
-      }
-      return match;
-    });
-    response.send({ data: filtered });
+  "/movie/:id",
+  (req: Request<{ id: number }, {}, {}>, res: Response<{}>) => {
+    res.render("item", { title: "movie", id: req.params.id });
   }
 );
+
+app.post("/api/add", (req: Request<{}, {}, {}>, res: Response<{}>) => {
+  const movie = MovieModel.create(
+    {
+      title: "title",
+      year: 2000,
+      genres: [{ name: "Ужас" }, { name: "Фантастика" }],
+      actors: [
+        { name: "Никита", lastName: "Кологривый" },
+        { name: "Стивен", lastName: "Сигал" },
+      ],
+    },
+    {
+      include: [ActorModel, GenreModel],
+    }
+  );
+  res.send(movie);
+});
+
 // console.log(req.body.name)
 // вынести типы в отдельный файл и оттуда сделать экспорт
 /******************************************************************************
@@ -120,3 +78,5 @@ app.get(
 ******************************************************************************/
 
 export { app };
+
+// onclick="document.location='page/new.html'"

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title><%=title %></title>
+  <meta charset="utf-8" />
+</head>
+
+<body>
+
+  <h1><%=title %> в EJS</h1>
+
+  <h3>Фильмы</h3>
+  <table>
+    <% for(var i=0; i<items.length;i++) {%>
+    <tr>
+      <td><a target="_blank" href="<%='/movie/' + items[i].id%>"><%=items[i].id %></a></td>
+      <td><%=items[i].title %></td>
+      <td><%=items[i].genres.map(element => {
+        return element.name;
+      }).join(', '); %></td>
+      <td><%=items[i].actors.map(element => {
+        return `${element.lastName} ${element.name}`;
+      }).join(', '); %></td>
+      <td><%=items[i].year %></td>
+    </tr>
+    <%} %>
+  </table>
+
+</body>
+<html>

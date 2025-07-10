@@ -53,19 +53,11 @@ Content-Type: application/json
 //удаление и фильтрация фильмов по id 
 ### Заполнение данных в массив let
 
-POST {{apiHost}}/new
+POST {{apiHost}}/api/add
 Content-Type: application/json
 
-{
-    "data": {
-        "title": "Fight",
-        "genres" : ["war", "documental"],
-        "actors": ["Pupa" , "Lupa", "Chook"],
-        "year": 1996
-    }
-}
-
-### Получение данных
+### Получение данных 
+//сделать гиперссылку, оформить красиво таблицу (по красоте чисто)
 
 GET {{apiHost}}/movies
 Content-Type: application/json
