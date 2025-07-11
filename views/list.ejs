@@ -11,9 +11,18 @@
   <h1><%=title %> в EJS</h1>
 
   <h3>Фильмы</h3>
-  <table>
+  <table border = "1">
+    <thead>
+      <tr>
+        <th>id</th>
+        <th>Название фильма</th>
+        <th>Жанр</th>
+        <th>Актеры</th>
+        <th>Год выпуска</th>
+      </tr>
+    </thead>
     <% for(var i=0; i<items.length;i++) {%>
-    <tr>
+    <tr align = "center">
       <td><a target="_blank" href="<%='/movie/' + items[i].id%>"><%=items[i].id %></a></td>
       <td><%=items[i].title %></td>
       <td><%=items[i].genres.map(element => {
