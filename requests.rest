@@ -56,6 +56,9 @@ Content-Type: application/json
 POST {{apiHost}}/api/add
 Content-Type: application/json
 
+### Удаление
+DELETE {{apiHost}}/movie/delete
+
 ### Получение данных 
 //сделать гиперссылку, оформить красиво таблицу (по красоте чисто)
 
@@ -68,3 +71,5 @@ Content-Type: application/json
     "genre": "war",
     "title": "Fight"    
 }
+
+

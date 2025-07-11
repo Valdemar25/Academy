@@ -46,6 +46,14 @@ app.get("/", (req: Request<{}, {}, { name: string }>, res: Response<{}>) => {
   });
 });
 
+// туда нам надо!
+app.delete("/movie/delete", (req: Request<{}, {}, { name: string }>, res: Response<{}>) => {
+  MovieModel.destroy({ }).then((movies) => {
+    console.log(movies);
+    res.render("list", { title: "hui", items: movies });
+  });
+});
+// а туда не надо
 app.get(
   "/movie/:id",
   (req: Request<{ id: number }, {}, {}>, res: Response<{}>) => {
