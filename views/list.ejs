@@ -4,6 +4,7 @@
 <head>
   <title><%=title %></title>
   <meta charset="utf-8" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 
 <body>
@@ -12,7 +13,7 @@
 
   <h3>Фильмы</h3>
 
-  <table border = "1">
+  <table border="1">
     <thead>
       <tr>
         <th>id</th>
@@ -24,7 +25,7 @@
       </tr>
     </thead>
     <% for(var i=0; i<items.length;i++) {%>
-    <tr align = "center">
+    <tr align="center">
       <td><a target="_blank" href="<%='/movie/' + items[i].id%>"><%=items[i].id %></a></td>
       <td><%=items[i].title %></td>
       <td><%=items[i].genres.map(element => {
@@ -34,16 +35,27 @@
         return `${element.lastName} ${element.name}`;
       }).join(', '); %></td>
       <td><%=items[i].year %></td>
-      <td><button onclick="deleteRow(this)">Удалить</button></td>
+      <td><button data-delete="<%=items[i].id %>">Удалить</button></td>
     </tr>
     <%} %>
   </table>
 
-<script>
-function deleteRow(button) {
-  const row = button.parentNode.parentNode;
-  row.parentNode.removeChild(row);
-}
-</script>
+
+
+  <script>
+    $(document).ready(function() {
+      $(document).on('click', '[data-delete]', (event) => {
+        const id = $(event.currentTarget).attr('data-delete');
+        console.log(id)
+        fetch('/api/delete/' + id, {
+          method: 'delete'
+        }).finally(() => {
+          location.reload();
+        })
+      })
+    })
+  </script>
+
+
 </body>
 <html>

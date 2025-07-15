@@ -16,20 +16,23 @@ import { NodeEnvs } from "@src/common/constants";
 //записать два инпута по одному записывать данные в массив, а по другому получать данные
 const app = express();
 
+
 import { ActorModel, GenreModel, MovieModel } from "./common/types/movie";
 import { title } from "process";
-
 // **** Middleware **** //
+
 
 // Basic middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 
+
 // Show routes called in console during development
 if (ENV.NodeEnv === NodeEnvs.Dev) {
   app.use(morgan("dev"));
 }
+
 
 // Security
 if (ENV.NodeEnv === NodeEnvs.Production) {
@@ -39,6 +42,7 @@ if (ENV.NodeEnv === NodeEnvs.Production) {
   }
 }
 
+
 app.get("/", (req: Request<{}, {}, { name: string }>, res: Response<{}>) => {
   MovieModel.findAll({ include: [ActorModel, GenreModel] }).then((movies) => {
     console.log(movies);
@@ -46,14 +50,16 @@ app.get("/", (req: Request<{}, {}, { name: string }>, res: Response<{}>) => {
   });
 });
 
-// туда нам надо!
-app.delete("/movie/delete", (req: Request<{}, {}, { name: string }>, res: Response<{}>) => {
-  MovieModel.destroy({ }).then((movies) => {
-    console.log(movies);
-    res.render("list", { title: "hui", items: movies });
-  });
+
+app.delete('/api/delete/:id', async (req, res) => {
+  const id = parseInt(req.params.id);
+  MovieModel.findByPk(id).then((movie) => {
+    movie?.destroy();
+    res.send({success: true})
+  })
 });
-// а туда не надо
+
+
 app.get(
   "/movie/:id",
   (req: Request<{ id: number }, {}, {}>, res: Response<{}>) => {
@@ -61,16 +67,11 @@ app.get(
   }
 );
 
+
 app.post("/api/add", (req: Request<{}, {}, {}>, res: Response<{}>) => {
   const movie = MovieModel.create(
     {
-      title: "title",
-      year: 2000,
-      genres: [{ name: "Ужас" }, { name: "Фантастика" }],
-      actors: [
-        { name: "Никита", lastName: "Кологривый" },
-        { name: "Стивен", lastName: "Сигал" },
-      ],
+
     },
     {
       include: [ActorModel, GenreModel],
@@ -79,6 +80,7 @@ app.post("/api/add", (req: Request<{}, {}, {}>, res: Response<{}>) => {
   res.send(movie);
 });
 
+//доработать все красиво 
 // console.log(req.body.name)
 // вынести типы в отдельный файл и оттуда сделать экспорт
 /******************************************************************************
@@ -88,3 +90,11 @@ app.post("/api/add", (req: Request<{}, {}, {}>, res: Response<{}>) => {
 export { app };
 
 // onclick="document.location='page/new.html'"
+
+/*<script>
+function deleteRow(button) {
+  const row = button.parentNode.parentNode;
+  row.parentNode.removeChild(row);
+}
+
+</script>*/

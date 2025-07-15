@@ -22,9 +22,7 @@
   </table>
 <script>
 function deleteRow(button) {
-  // Находим родительскую строку (<tr>)
   const row = button.parentNode.parentNode;
-  // Удаляем строку из таблицы
   row.parentNode.removeChild(row);
 }
 </script>
