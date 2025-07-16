@@ -16,23 +16,19 @@ import { NodeEnvs } from "@src/common/constants";
 //записать два инпута по одному записывать данные в массив, а по другому получать данные
 const app = express();
 
-
 import { ActorModel, GenreModel, MovieModel } from "./common/types/movie";
 import { title } from "process";
 // **** Middleware **** //
-
 
 // Basic middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 
-
 // Show routes called in console during development
 if (ENV.NodeEnv === NodeEnvs.Dev) {
   app.use(morgan("dev"));
 }
-
 
 // Security
 if (ENV.NodeEnv === NodeEnvs.Production) {
@@ -42,23 +38,20 @@ if (ENV.NodeEnv === NodeEnvs.Production) {
   }
 }
 
-
 app.get("/", (req: Request<{}, {}, { name: string }>, res: Response<{}>) => {
   MovieModel.findAll({ include: [ActorModel, GenreModel] }).then((movies) => {
     console.log(movies);
-    res.render("list", { title: "hui", items: movies });
+    res.render("list", { title: "Movie Catalog: NYX", items: movies });
   });
 });
 
-
-app.delete('/api/delete/:id', async (req, res) => {
+app.delete("/api/delete/:id", async (req, res) => {
   const id = parseInt(req.params.id);
   MovieModel.findByPk(id).then((movie) => {
     movie?.destroy();
-    res.send({success: true})
-  })
+    res.send({ success: true });
+  });
 });
-
 
 app.get(
   "/movie/:id",
@@ -67,11 +60,16 @@ app.get(
   }
 );
 
-
 app.post("/api/add", (req: Request<{}, {}, {}>, res: Response<{}>) => {
   const movie = MovieModel.create(
     {
-
+      title: "Последний Бастион",
+      year: 1950,
+      genres: [{ name: "Документальный" }, { name: "Исторический" }],
+      actors: [
+        { name: "Федор", lastName: "Аронов" },
+        { name: "Василий", lastName: "Немой" },
+      ],
     },
     {
       include: [ActorModel, GenreModel],
@@ -80,7 +78,7 @@ app.post("/api/add", (req: Request<{}, {}, {}>, res: Response<{}>) => {
   res.send(movie);
 });
 
-//доработать все красиво 
+//доработать все красиво
 // console.log(req.body.name)
 // вынести типы в отдельный файл и оттуда сделать экспорт
 /******************************************************************************

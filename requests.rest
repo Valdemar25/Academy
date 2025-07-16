@@ -62,13 +62,7 @@ POST {{apiHost}}/api/add
 Content-Type: application/json
 
 {
-"title": "title",
-    "year": 2000,
-    "genres": [{ "name": "Ужас" }, { "name": "Фантастика" }],
-    "actors": [
-        { "name": "Никита", "lastName": "Кологривый" },
-        { "name": "Стивен", "lastName": "Сигал" },
-    ],
+
 }
 
 
