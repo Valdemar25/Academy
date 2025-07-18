@@ -8,11 +8,8 @@
 </head>
 
 <body>
-
   <h1><%=title %> в EJS</h1>
-
   <h3>Фильмы</h3>
-
   <table border="1">
     <thead>
       <tr>
@@ -39,9 +36,7 @@
     </tr>
     <%} %>
   </table>
-
-
-
+  <!--Скрипт для удаления-->
   <script>
     $(document).ready(function() {
       $(document).on('click', '[data-delete]', (event) => {
@@ -55,11 +50,8 @@
       })
     })
   </script>
-
-
+  <!--Скрипт для удаления закончен-->
 </body>
-<html>
-
 <form action="/movie" method="post" class="form-example">
   <div class="form-example">
     <label for="name">Введите для поиска: </label>
@@ -69,3 +61,5 @@
     <input type="submit" value="Поиск" />
   </div>
 </form>
+<html>
+

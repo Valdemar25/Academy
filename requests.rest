@@ -11,6 +11,9 @@ POST {{apiHost}}/api/add
 Content-Type: application/json
 {}
 
+### Редактирование данных фильма
+PATCH {{apiHost}}/api/create
+
 ### Удаление фильма
 DELETE {{apiHost}}/movie/delete
 
@@ -23,3 +26,7 @@ Content-Type: application/json
     "genre": "war",
     "title": "Fight"    
 }
+
+###
+
+GET {{apiHost}}/movie/11

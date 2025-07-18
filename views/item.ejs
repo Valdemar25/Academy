@@ -4,6 +4,7 @@
 <head>
   <title><%= title %></title>
   <meta charset="utf-8" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 
 <body>
@@ -32,53 +33,64 @@
     </tbody>
   </table>
 
-  <form action="/movie" method="post" class="form-example">
-    <div class="form-example" id="display">
-      <p><label for="name">Название Фильма: </label>
-        <input type="text" name="name" id="text-editor" required />
-      <p><label for="name">Жанр: </label>
-        <input type="text" name="name" id="text-editor" required />
-      <p><label for="name">Актеры: </label>
-        <input type="text" name="name" id="text-editor" required />
-      <p><label for="name">Год выхода: </label>
-        <input type="text" name="name" id="text-editor" required />
-      <p><label for="name">Введите для поиска: </label>
-        <input type="text" name="name" id="text-editor" required />
-    </div>
-    </p>
-    <button id="save-button">Редактировать</button>
-</body>
+  <form action="/api/edit/" method="patch" name="form" id="form-example">
+    <fieldset>
+      <legend>Информация о фильме</legend>
+      <p><label for="title">Название:</label>
+        <input type="text" name="title" value="<%= item.title %>" />
+      </p>
+      <p><label for="genres">Жанр:</label>
+        <%item.genres.forEach((g, index) => {%>
+      <div>
+        <input type="hidden" name="genres[<%=index%>][id]" value="<%=g.id%>" />
+        <input name="genres[<%=index%>][name]" value="<%=g.name%>" />
+      </div>
+      <%})%>
+      </p>
+      <p><label for="actors">Актеры:</label>
+        <%item.actors.forEach((a, index) => {%>
+          <input type="hidden" name="actors[<%=index%>][id]" value="<%=a.id%>" />
+      <div>
+        <input name="actors[<%=index%>][name]" value="<%=a.name%>" />
+      </div>
+      <div>
+        <input name="actors[<%=index%>][lastName]" value="<%=a.lastName%>" />
+      </div>
+      <%})%>
+      </p>
+      <p><label for="year">Год выхода:</label>
+        <input type="text" name="year" value="<%= item.year %>" />
+      </p>
+      <input type="hidden" name="id" value="<%=item.id%>" />
+      <p><input type="submit" name="save" value="Сохранить Изменения" /></p>
+    </fieldset>
+  </form>
 
-<script>
-  const editor = document.getElementById('text-editor');
-  const saveButton = document.getElementById('save-button');
-  const display = document.getElementById('display');
-
-  saveButton.addEventListener('click', function() {
-    const text = editor.value;
-    display.textContent = text;
-  });
-</script>
-
-
-<script>
-  $(document).ready(function() {
-    $(document).on('click', '[data-create]', (event) => {
-      const id = $(event.currentTarget).attr('data-delete');
-      console.log(id)
-      fetch('/api/create/' + id, {
-        method: 'create'
-      }).finally(() => {
-        location.reload();
+  <!--Скрипт для редактирования-->
+  <script>
+    $(document).ready(function() {
+      $(document).on('submit', '#form-example', (event) => {
+        event.preventDefault();
+        const id = $(event.currentTarget).attr('buttonSubmit');
+        console.log(id)
+        fetch('/api/edit/', {
+          method: 'post',
+          headers: {},
+          body: new FormData(event.currentTarget)
+        }).finally(() => {
+          location.reload();
+        })
       })
     })
-  })
-</script>
+  </script>
+  <!--Скрипт для редактирования закончен-->
 
 </html>
 
 
-<%"надо сделать fetch для кнопки редактирования (связать с server)"%>
-<%"связать html файл, для передачи данных  выранном фильме"%>
-<%"объеденить возможность редактирования  изминением"%>
-<%"бери из api !!!!!!!!!!  МОРОЧЬ СЕБЕГОЛОВУ"%>
+
+
+<!--"надо сделать fetch для кнопки редактирования (связать server)"-->
+<!--"связать html файл, для передачи данных  выранном фильме"-->
+<!--"объеденить возможность редактирования  изминением"-->
+<!--"бери из api !!!!!!!!!!  МОРОЧЬ СЕБЕГОЛОВУ"-->

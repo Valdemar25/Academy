@@ -51,5 +51,5 @@ MovieModel.hasMany(GenreModel);
 MovieModel.hasMany(ActorModel);
 
 sequelize.sync()
-export { MovieModel, ActorModel, GenreModel };
+export { MovieModel, ActorModel, GenreModel, Movie };
 

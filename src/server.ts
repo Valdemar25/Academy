@@ -9,6 +9,8 @@ import logger from "jet-logger";
 
 import ENV from "@src/common/constants/env";
 import { NodeEnvs } from "@src/common/constants";
+import multer from "multer";
+const upload = multer();
 
 /******************************************************************************
                                 Setup
@@ -16,7 +18,12 @@ import { NodeEnvs } from "@src/common/constants";
 //записать два инпута по одному записывать данные в массив, а по другому получать данные
 const app = express();
 
-import { ActorModel, GenreModel, MovieModel } from "./common/types/movie";
+import {
+  ActorModel,
+  GenreModel,
+  Movie,
+  MovieModel,
+} from "./common/types/movie";
 import { title } from "process";
 
 app.use(express.json());
@@ -45,34 +52,44 @@ app.get("/", (req: Request<{}, {}, { name: string }>, res: Response<{}>) => {
 //Удаление фильма
 app.delete("/api/delete/:id", async (req, res) => {
   const id = parseInt(req.params.id);
+  const updateData = req.body;
   MovieModel.findByPk(id).then((movie) => {
     movie?.destroy();
     res.send({ success: true });
   });
 });
 
-//Страница для фильма взятого по id
-app.get('/movie/:id', async (req: Request<{ id: string }>, res: Response) => {
-  const id = Number(req.params.id);
-  const movie = await MovieModel.findByPk(id, { 
-    include: [ActorModel, GenreModel],
-  });
-  res.render('item', {title: 'Фильм', item: movie });
-});
-
 //Редактирование (незаконченно)
-app.post('/api/update/:id', async (req: Request<{ id: string }>, res: Response) => {
-  const id = Number(req.params.id);
-});
+app.patch(
+  "/api/create/:id",
+  async (req: Request<{ id: string }>, res: Response) => {
+    const id = Number(req.params.id);
+    MovieModel.findByPk(id).then((movie) => {
+      [];
+    });
+  }
+);
 
-// API: получить фильм по ID
-app.get("/api/movie/:id", async (req: Request<{ id: string }>, res: Response) => {
-  const id = parseInt(req.params.id);
+//Страница для фильма взятого по id
+app.get("/movie/:id", async (req: Request<{ id: string }>, res: Response) => {
+  const id = Number(req.params.id);
   const movie = await MovieModel.findByPk(id, {
     include: [ActorModel, GenreModel],
   });
-  res.send(movie);
+  res.render("item", { title: "Фильм", item: movie });
 });
+
+// API: получить фильм по ID
+app.get(
+  "/api/movie/:id",
+  async (req: Request<{ id: string }>, res: Response) => {
+    const id = parseInt(req.params.id);
+    const movie = await MovieModel.findByPk(id, {
+      include: [ActorModel, GenreModel],
+    });
+    res.send(movie);
+  }
+);
 
 //Добавить фильм
 app.post("/api/add", (req: Request<{}, {}, {}>, res: Response<{}>) => {
@@ -93,9 +110,23 @@ app.post("/api/add", (req: Request<{}, {}, {}>, res: Response<{}>) => {
   res.send(movie);
 });
 
+//Добавить фильм
+app.post(
+  "/api/edit",
+  upload.none(),
+  (req: Request<{}, {}, Movie>, res: Response<{}>) => {
+    MovieModel.update(req.body, {
+      where: {
+        id: req.body.id,
+      },
+    }).then((updated) => {
+      res.send(updated);
+    });
+  }
+);
+
 /******************************************************************************
                                 Export default
 ******************************************************************************/
 
 export { app };
-
