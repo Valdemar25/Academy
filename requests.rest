@@ -1,81 +1,22 @@
 @apiHost = http://localhost:3000
 
-
 ### Getting a list of users
 # @name allUsers
-GET {{apiHost}}/hello
-
-
-###
-@userId = {{allUsers.response.body.users[1].id}}
-@created = 2025-07-01T06:07:32.544Z
-
-
-### new person (why not PUT)
-POST {{apiHost}}/api/users/add
-Content-Type: application/json
-
-{
-  "user": {
-    "id": 1,
-    "created": "{{created}}",
-    "name": "dfgdfg",
-    "email": "dfgdfgdgfg"
-  }
-}
-
 
 ### delete person
 DELETE {{apiHost}}/api/movie
 
-
-### edit person
-PUT {{apiHost}}/api/users/update
-Content-Type: application/json
-
-{
-    "user": {
-        "id": {{userId}},
-        "created": "{{created}}",
-        "name": "first",
-        "email": "second" 
-        }
-}
-
-
-###
-POST {{apiHost}}/hello
-Content-Type: application/json
-
-{
-    "name": "Vladimir"
-}
-
-
-
-//добавить входные параметры через дайрект фильтер погода типо и т.д.
-//удаление и фильтрация фильмов по id
-
-
-### Заполнение данных в массив let
+### Заполнение данных в массив 
 POST {{apiHost}}/api/add
 Content-Type: application/json
+{}
 
-{
-
-}
-
-
-### Удаление
+### Удаление фильма
 DELETE {{apiHost}}/movie/delete
 
-
-### Получение данных 
-//сделать гиперссылку, оформить красиво таблицу (по красоте чисто)
-
+### Получение фильмов 
 GET {{apiHost}}/movies
 Content-Type: application/json
-
 {
     "year": 1995,
     "actor": "Chook",

@@ -2,64 +2,83 @@
 <html>
 
 <head>
-  <title><%=title %></title>
+  <title><%= title %></title>
   <meta charset="utf-8" />
 </head>
 
-
-
 <body>
-<table border = "1">
-  <h1><%=title %> в EJS</h1>
-  <h3>Фильм <%=id%></h3>
-  <thead>
+
+  <h1><%= title %> в EJS</h1>
+  <h3>Фильм ID: <%= item.id %></h3>
+
+  <table border="1">
+    <thead align="center">
       <tr>
         <th>id</th>
         <th>Название фильма</th>
+        <th>Жанр</th>
+        <th>Актеры</th>
+        <th>Год выхода</th>
       </tr>
-    <tbody>
+    </thead>
+    <tbody align="center">
       <tr>
-        <td><%=id%></td>
-        <td><%=title %></td>
-      </tr> 
+        <td><%= item.id %></td>
+        <td><%= item.title %></td>
+        <td><%= item.genres.map(g => g.name).join(', ') %></td>
+        <td><%= item.actors.map(a => `${a.lastName} ${a.name}`).join(', ') %></td>
+        <td><%= item.year %></td>
+      </tr>
     </tbody>
   </table>
 
   <form action="/movie" method="post" class="form-example">
-  <p><div class="form-example">
-    <label for="name">Название Фильма: </label>
-    <input type="text" name="name" id="name" required />
-    <button id="editButton">Редактировать</button>
-  </div></p>
-
-  <form action="/movie" method="post" class="form-example">
-  <p><div class="form-example">
-    <label for="name">Жанр: </label>
-    <input type="text" name="name" id="name" required />
-    <button id="editButton">Редактировать</button>
-  </div></p>
-
-  <form action="/movie" method="post" class="form-example">
-  <p><div class="form-example">
-    <label for="name">Актеры: </label>
-    <input type="text" name="name" id="name" required />
-    <button id="editButton">Редактировать</button>
-  </div></p>
-
-  <form action="/movie" method="post" class="form-example">
-  <p><div class="form-example">
-    <label for="name">Год выхода: </label>
-    <input type="text" name="name" id="name" required />
-    <button id="editButton">Редактировать</button>
-  </div></p>
-
-  <form action="/movie" method="post" class="form-example">
-  <p><div class="form-example">
-    <label for="name">Введите для поиска: </label>
-    <input type="text" name="name" id="name" required />
-    <button id="editButton">Редактировать</button>
-  </div></p>
-
+    <div class="form-example" id="display">
+      <p><label for="name">Название Фильма: </label>
+        <input type="text" name="name" id="text-editor" required />
+      <p><label for="name">Жанр: </label>
+        <input type="text" name="name" id="text-editor" required />
+      <p><label for="name">Актеры: </label>
+        <input type="text" name="name" id="text-editor" required />
+      <p><label for="name">Год выхода: </label>
+        <input type="text" name="name" id="text-editor" required />
+      <p><label for="name">Введите для поиска: </label>
+        <input type="text" name="name" id="text-editor" required />
+    </div>
+    </p>
+    <button id="save-button">Редактировать</button>
 </body>
-<html>
-  
+
+<script>
+  const editor = document.getElementById('text-editor');
+  const saveButton = document.getElementById('save-button');
+  const display = document.getElementById('display');
+
+  saveButton.addEventListener('click', function() {
+    const text = editor.value;
+    display.textContent = text;
+  });
+</script>
+
+
+<script>
+  $(document).ready(function() {
+    $(document).on('click', '[data-create]', (event) => {
+      const id = $(event.currentTarget).attr('data-delete');
+      console.log(id)
+      fetch('/api/create/' + id, {
+        method: 'create'
+      }).finally(() => {
+        location.reload();
+      })
+    })
+  })
+</script>
+
+</html>
+
+
+<%"надо сделать fetch для кнопки редактирования (связать с server)"%>
+<%"связать html файл, для передачи данных  выранном фильме"%>
+<%"объеденить возможность редактирования  изминением"%>
+<%"бери из api !!!!!!!!!!  МОРОЧЬ СЕБЕГОЛОВУ"%>

@@ -18,19 +18,15 @@ const app = express();
 
 import { ActorModel, GenreModel, MovieModel } from "./common/types/movie";
 import { title } from "process";
-// **** Middleware **** //
 
-// Basic middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 
-// Show routes called in console during development
 if (ENV.NodeEnv === NodeEnvs.Dev) {
   app.use(morgan("dev"));
 }
 
-// Security
 if (ENV.NodeEnv === NodeEnvs.Production) {
   // eslint-disable-next-line n/no-process-env
   if (!process.env.DISABLE_HELMET) {
@@ -38,6 +34,7 @@ if (ENV.NodeEnv === NodeEnvs.Production) {
   }
 }
 
+//Отображение фильмов
 app.get("/", (req: Request<{}, {}, { name: string }>, res: Response<{}>) => {
   MovieModel.findAll({ include: [ActorModel, GenreModel] }).then((movies) => {
     console.log(movies);
@@ -45,6 +42,7 @@ app.get("/", (req: Request<{}, {}, { name: string }>, res: Response<{}>) => {
   });
 });
 
+//Удаление фильма
 app.delete("/api/delete/:id", async (req, res) => {
   const id = parseInt(req.params.id);
   MovieModel.findByPk(id).then((movie) => {
@@ -53,22 +51,39 @@ app.delete("/api/delete/:id", async (req, res) => {
   });
 });
 
-app.get(
-  "/movie/:id",
-  (req: Request<{ id: number }, {}, {}>, res: Response<{}>) => {
-    res.render("item", { title: "movie", id: req.params.id });
-  }
-);
+//Страница для фильма взятого по id
+app.get('/movie/:id', async (req: Request<{ id: string }>, res: Response) => {
+  const id = Number(req.params.id);
+  const movie = await MovieModel.findByPk(id, { 
+    include: [ActorModel, GenreModel],
+  });
+  res.render('item', {title: 'Фильм', item: movie });
+});
 
+//Редактирование (незаконченно)
+app.post('/api/update/:id', async (req: Request<{ id: string }>, res: Response) => {
+  const id = Number(req.params.id);
+});
+
+// API: получить фильм по ID
+app.get("/api/movie/:id", async (req: Request<{ id: string }>, res: Response) => {
+  const id = parseInt(req.params.id);
+  const movie = await MovieModel.findByPk(id, {
+    include: [ActorModel, GenreModel],
+  });
+  res.send(movie);
+});
+
+//Добавить фильм
 app.post("/api/add", (req: Request<{}, {}, {}>, res: Response<{}>) => {
   const movie = MovieModel.create(
     {
-      title: "Последний Бастион",
+      title: "last game",
       year: 1950,
-      genres: [{ name: "Документальный" }, { name: "Исторический" }],
+      genres: [{ name: "War" }, { name: "History" }],
       actors: [
-        { name: "Федор", lastName: "Аронов" },
-        { name: "Василий", lastName: "Немой" },
+        { name: "Hellen", lastName: "Heller" },
+        { name: "Kris", lastName: "Heller" },
       ],
     },
     {
@@ -78,21 +93,9 @@ app.post("/api/add", (req: Request<{}, {}, {}>, res: Response<{}>) => {
   res.send(movie);
 });
 
-//доработать все красиво
-// console.log(req.body.name)
-// вынести типы в отдельный файл и оттуда сделать экспорт
 /******************************************************************************
                                 Export default
 ******************************************************************************/
 
 export { app };
 
-// onclick="document.location='page/new.html'"
-
-/*<script>
-function deleteRow(button) {
-  const row = button.parentNode.parentNode;
-  row.parentNode.removeChild(row);
-}
-
-</script>*/
