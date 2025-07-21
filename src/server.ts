@@ -95,9 +95,9 @@ app.get(
 app.post("/api/add", (req: Request<{}, {}, {}>, res: Response<{}>) => {
   const movie = MovieModel.create(
     {
-      title: "last game",
-      year: 1950,
-      genres: [{ name: "War" }, { name: "History" }],
+      title: "Измененность",
+      year: 2003,
+      genres: [{ name: "Триллер" }, { name: "Ужасы" }],
       actors: [
         { name: "Hellen", lastName: "Heller" },
         { name: "Kris", lastName: "Heller" },
